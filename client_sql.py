@@ -70,7 +70,7 @@ def authenticate_user_unsafe(conn, email, password):
     c = conn.cursor()
 
     query = "SELECT user_id, first_name, password FROM Users WHERE email ='" + email  + "' and password ='" + sha1_hash(password) + "'"
-    print(query)
+    #print(query)
     c.execute(query)
     
     user = c.fetchone()
@@ -93,7 +93,7 @@ def edit_review(conn, user_id):
     review_id_edit = input("Enter the review id you want to edit: ")
     new_rating = input("Enter the new rating: ")
     query = "UPDATE Reviews SET rating = " + new_rating + " WHERE review_id = " + review_id_edit
-    print(query)
+    #print(query)
     c.executescript(query)
     conn.commit()
     print("Review updated successfully!")
