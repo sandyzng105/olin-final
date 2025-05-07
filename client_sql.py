@@ -88,7 +88,7 @@ def edit_review(conn, user_id):
     item =  c.fetchone()
     while item:
         review_id, product_id, user_id, rating, comment, ts = item
-        print(f"review id: {review_id}, order id: {review_id}, product id: {product_id}, rating: {rating}, comment: {comment}")
+        print(f"review id: {review_id}, user id: {user_id}, product id: {product_id}, rating: {rating}, comment: {comment}")
         item =  c.fetchone()
     review_id_edit = input("Enter the review id you want to edit: ")
     new_rating = input("Enter the new rating: ")
@@ -156,7 +156,7 @@ def main():
             print("Goodbye!")
             break
         else:
-            print("Invalid choice. Please enter a number between 1 and 4.")
+            print("Invalid choice. Please enter a number between 1 and 6.")
 
     conn.close()
 
