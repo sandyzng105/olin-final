@@ -93,26 +93,31 @@ def edit_review(conn, user_id):
     review_id_edit = input("Enter the review id you want to edit: ")
     new_rating = input("Enter the new rating: ")
     query = "UPDATE Reviews SET rating = " + new_rating + " WHERE review_id = " + review_id_edit
-    #print(query)
-    c.execute(query)
+    print(query)
+    c.executescript(query)
+    conn.commit()
+    print("Review updated successfully!")
     
 
 
-def list_all_reviews(conn):
+def list_all_my_reviews(conn, user_id):
     c = conn.cursor()
-    query = "SELECT * FROM Reviews " 
+    query = "SELECT * FROM Reviews WHERE user_id = " + str(user_id)
     c.execute(query)
-    print("DEBUG only: all reviews:")
-    item =  c.fetchone()
+    print("Your reviews:")
+    item = c.fetchone()
+    if not item:
+        print("You have not written any reviews.")
+        return
     while item:
         review_id, product_id, user_id, rating, comment, ts = item
-        print(f"review id: {review_id}, order id: {review_id}, product id: {product_id}, user id: {user_id}, rating: {rating}, comment: {comment}")
-        item =  c.fetchone()
+        print(f"Review ID: {review_id}, Product ID: {product_id}, Rating: {rating}, Comment: {comment}, Timestamp: {ts}")
+        item = c.fetchone()
     
 
 def main():
     conn = connect_db()
-    print("Welcome to the Clothing Store Client!")
+    print("Welcome to the Olin Clothing Store!")
     email = input("Enter your email: ").strip()
     password = input("Enter your password: ").strip()
 
@@ -128,14 +133,14 @@ def main():
 
     while True:
         print("\nWhat would you like to do?")
-        print("1. View my information")
+        print("1. View my profile information")
         print("2. View my orders")
         print("3. View my payment methods")
-        print("10. List all reviews(debug only)")
-        print("11. Edit my review")
-        print("4. Exit")
+        print("4. List all my reviews")
+        print("5. Edit my reviews")
+        print("6. Exit")
 
-        choice = input("Enter choice (1-4): ").strip()
+        choice = input("Enter choice (1-6): ").strip()
 
         if choice == '1':
             view_user_info(conn, user_id)
@@ -143,11 +148,11 @@ def main():
             view_orders(conn, user_id)
         elif choice == '3':
             view_payment_methods(conn, user_id)
-        elif choice == '10':
-            list_all_reviews(conn)
-        elif choice == '11':
-            edit_review(conn, user_id)
         elif choice == '4':
+            list_all_my_reviews(conn, user_id)
+        elif choice == '5':
+            edit_review(conn, user_id)
+        elif choice == '6':
             print("Goodbye!")
             break
         else:
